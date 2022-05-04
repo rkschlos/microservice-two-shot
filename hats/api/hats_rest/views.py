@@ -17,6 +17,15 @@ class HatListEncoder(ModelEncoder):
         "picture_url",
     ]
 
+class HatDetailEncoder(ModelEncoder):
+    model = Hat
+    properties = [
+        "fabric",
+        "style",
+        "color",
+        "picture_url",
+    ]
+
 @require_http_methods(["GET", "POST"])
 def api_list_hats(request):
     if request.method == "GET":
@@ -25,11 +34,14 @@ def api_list_hats(request):
             {"hats": hats},
             encoder=HatListEncoder,
         )
+
     else:
         content = json.loads(request.body)
+
+
         hat = Hat.objects.create(**content)
         return JsonResponse(
             hat,
-            encoder=HatListEncoder,
+            encoder=HatDetailEncoder,
             safe=False,
         )
