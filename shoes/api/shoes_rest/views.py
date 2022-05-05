@@ -14,7 +14,7 @@ class BinVOEncoder(ModelEncoder):
 
 class ShoeListEncoder(ModelEncoder):
     model = Shoe
-    properties = ["model", "color", "manufacturer"]
+    properties = ["model", "color", "manufacturer",]
 
 class ShoeDetailEncoder(ModelEncoder):
     model = Shoe
@@ -56,4 +56,36 @@ def api_list_shoes(request):
             encoder = ShoeDetailEncoder,
             safe=False,
         )
-        
+
+@require_http_methods(["DELETE", "GET", "PUT"])
+def api_show_shoe(request, pk):
+
+    if request.method == "GET":
+        shoe = Shoe.objects.get(id=pk)
+        return JsonResponse(
+            shoe, 
+            encoder=ShoeDetailEncoder, 
+            safe=False,
+        )
+    elif request.method == "DELETE":
+        count, _ = Shoe.objects.filter(id=pk).delete()
+        return JsonResponse({"deleted": count > 0})
+    else:
+        content = json.loads(request.body)
+        try:
+            if "shoe_bin" in content:
+                shoe_bin = BinVO.objects.get(import_href = content["shoe_bin"])
+                content["shoe_bin"] = shoe_bin
+        except BinVO.DoesNotExist:
+            return JsonResponse(
+                {"message": "Invalid state abbreviation"},
+                status = 400,
+            )
+        Shoe.objects.filter(id=pk).update(**content)
+        shoe = Shoe.objects.get(id=pk)
+        return JsonResponse(
+            shoe,
+            encoder=ShoeDetailEncoder,
+            safe=False,
+        )
+
