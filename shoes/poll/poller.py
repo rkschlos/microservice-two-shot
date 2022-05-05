@@ -5,6 +5,7 @@ import time
 import json
 import requests
 
+
 sys.path.append("")
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "shoes_project.settings")
 django.setup()
@@ -16,13 +17,17 @@ from shoes_rest.models import BinVO
 def get_bin():
     response = requests.get("http://wardrobe-api:8000/api/bins/")
     content = json.loads(response.content)
-    print("content", content)
     for bin in content["bins"]:
         BinVO.objects.update_or_create(
-            import_href = bin["href"],
-            defaults={"closet_name": bin["closet_name"]},
+            import_href=bin["href"],
+            defaults= {
+                "closet_name": bin["closet_name"],
+                "bin_number": bin["bin_number"],
+                "bin_size": bin["bin_size"]
+            }
         )
-        print (bin)
+    
+
 
 def poll():
     while True:
