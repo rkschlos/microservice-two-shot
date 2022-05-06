@@ -6,6 +6,8 @@ function HatsList(props) {
             <th>Fabric</th>
             <th>Style</th>
             <th>Color</th>
+            <th>Image</th>
+            <th>Location</th>
           </tr>
         </thead>
         <tbody>
@@ -15,6 +17,8 @@ function HatsList(props) {
                 <td>{ hat.fabric }</td>
                 <td>{ hat.style }</td>
                 <td>{ hat.color }</td>
+                <td>{ hat.picture_url }</td>
+                <td>{ hat.id }</td>
               </tr>
             );
           })}
