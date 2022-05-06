@@ -10,32 +10,34 @@ root.render(
 );
 
 
-async function loadHats() {
-  const response = await fetch('http://localhost:8090/api/hats/');
-  if (response.ok) {
-    const data = await response.json();
+async function loadHatsandShoes() {
+  const responseHats = await fetch('http://localhost:8090/api/hats/');
+  const responseShoes = await fetch('http://localhost:8080/api/shoes/');
+  if (responseHats.ok && responseShoes.ok) {
+    const dataHats = await responseHats.json();
+    const dataShoes = await responseShoes.json()
     root.render(
       <React.StrictMode>
-        <App hats={data.hats} />
+        <App hats={dataHats.hats} shoes={dataShoes.shoes} />
       </React.StrictMode>
     );
   } else {
-    console.error(response);
+    console.error(responseHats); console.error(responseShoes);
   }
 }
-loadHats();
+loadHatsandShoes();
 
-async function loadShoes() {
-  const response = await fetch('http://localhost:8080/api/shoes/');
-  if (response.ok) {
-    const data = await response.json();
-    root.render(
-      <React.StrictMode>
-        <App shoes={data.shoes} />
-      </React.StrictMode>
-    );
-  } else {
-    console.error(response);
-  }
-}
-loadShoes();
+// async function loadShoes() {
+//   const response = await fetch('http://localhost:8080/api/shoes/');
+//   if (response.ok) {
+//     const data = await response.json();
+//     root.render(
+//       <React.StrictMode>
+//         <App shoes={data.shoes} />
+//       </React.StrictMode>
+//     );
+//   } else {
+//     console.error(response);
+//   }
+// }
+//loadShoes();
