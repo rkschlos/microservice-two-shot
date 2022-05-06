@@ -10,6 +10,7 @@ root.render(
 );
 
 
+
 async function loadHatsandShoes() {
   const responseHats = await fetch('http://localhost:8090/api/hats/');
   const responseShoes = await fetch('http://localhost:8080/api/shoes/');
